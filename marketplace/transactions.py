@@ -175,8 +175,12 @@ class Transactions:
 
 
         # Creates a Tuple object that the hash function can hash, since both variables have different types, adding them would result in a TypeError :c
-        init_hash = hash((tx.product_name, tx.timestamp))
-        return (init_hash * 7) % self._capacity
+        key = (f"{tx.seller}|{tx.buyer}|{tx.price}|"
+               f"{tx.timestamp.isoformat()}|{tx.product_name}")
+        h = 0
+        for ch in key:
+            h = (h * 31 + ord(ch)) % 2_147_483_647
 
+        return h % self._capacity
 
 
